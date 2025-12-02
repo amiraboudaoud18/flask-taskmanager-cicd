@@ -61,31 +61,27 @@ jobs:
       - name: Build Docker Image (validation only)
         run: docker build -t flask-taskmanager:validate .
 
-    # Job for pushes to main ONLY
-    build-and-push:
-      runs-on: ubuntu-latest
-      # Run ONLY on push to main (not PRs, not dev)
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  # Job for pushes to main ONLY
+  build-and-push:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        # 6.2 Step 1: Log in to Docker Hub
-        - name: Log in to Docker Hub
-          uses: docker/login-action@v2
-          with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-        # 6.2 Step 2: Build Docker image
-        - name: Build Docker Image
-          run: |
-            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:latest .
-            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:latest ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:${{ github.sha }}
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:latest .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:latest ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:${{ github.sha }}
 
-        # 6.2 Step 3: Push to Dockerhub
-        - name: Push to Docker Hub
-          run: |
-            docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:latest
-            docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:${{ github.sha }}
+      - name: Push to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-taskmanager:${{ github.sha }}
