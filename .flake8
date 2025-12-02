@@ -1,0 +1,16 @@
+[flake8]
+exclude = 
+    .git,
+    __pycache__,
+    venv,
+    env,
+    .venv,
+    build,
+    dist,
+    *.egg-info,
+    .pytest_cache,
+    .github,
+    migrations,
+    node_modules
+max-line-length = 127
+max-complexity = 10
