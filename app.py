@@ -1,3 +1,5 @@
+# Version: 1.0.1 - Testing CI/CD pipeline on dev branch
+
 import os
 from datetime import datetime, date
 from functools import wraps
