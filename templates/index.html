@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Your Tasks - Task Manager{% endblock %}
+{% block content %}
+<h1>Your Tasks</h1>
+
+<div class="filters">
+  <strong>Filter:</strong>
+  <a href="{{ url_for('index', status='all') }}" {% if status_filter == 'all' %}style="font-weight:bold"{% endif %}>All</a>
+  <a href="{{ url_for('index', status='open') }}" {% if status_filter == 'open' %}style="font-weight:bold"{% endif %}>Open</a>
+  <a href="{{ url_for('index', status='done') }}" {% if status_filter == 'done' %}style="font-weight:bold"{% endif %}>Done</a>
+</div>
+
+{% if tasks %}
+<ul class="task-list">
+  {% for task in tasks %}
+    {% set overdue = task.is_overdue() %}
+    <li class="task-item">
+      <div class="task-header">
+        <div>
+          {% if task.is_completed %}
+            <s>{{ task.title }}</s>
+          {% else %}
+            {{ task.title }}
+          {% endif %}
+          {% if task.is_completed %}
+            <span class="badge done">Done</span>
+          {% else %}
+            <span class="badge open">Open</span>
+          {% endif %}
+          {% if overdue %}
+            <span class="badge overdue">Overdue</span>
+          {% endif %}
+        </div>
+        <div>
+          <form method="post" action="{{ url_for('toggle_task', task_id=task.id) }}" class="inline">
+            <button type="submit">
+              {% if task.is_completed %}Reopen{% else %}Complete{% endif %}
+            </button>
+          </form>
+          <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+          <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}" class="inline"
+                onsubmit="return confirm('Delete this task?');">
+            <button type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% if task.description %}
+        <p>{{ task.description }}</p>
+      {% endif %}
+      <small>
+        Created {{ task.created_at.strftime('%Y-%m-%d %H:%M') }}
+        {% if task.due_date %}
+          | Due {{ task.due_date.isoformat() }}
+        {% endif %}
+      </small>
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No tasks yet. <a href="{{ url_for('create_task') }}">Create your first task</a>.</p>
+{% endif %}
+{% endblock %}

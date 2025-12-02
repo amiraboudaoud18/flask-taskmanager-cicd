@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% if task %}
+  {% set page_title = "Edit Task" %}
+{% else %}
+  {% set page_title = "New Task" %}
+{% endif %}
+{% block title %}{{ page_title }} - Task Manager{% endblock %}
+{% block content %}
+<h1>{{ page_title }}</h1>
+<form method="post">
+  <label>
+    Title
+    <input type="text" name="title" value="{{ task.title if task else '' }}" required>
+  </label>
+  <label>
+    Description
+    <textarea name="description" rows="4">{{ task.description if task and task.description else "" }}</textarea>
+  </label>
+  <label>
+    Due date
+    <input type="date" name="due_date" value="{% if task and task.due_date %}{{ task.due_date.isoformat() }}{% endif %}">
+  </label>
+  {% if task %}
+    <label>
+      <input type="checkbox" name="is_completed" value="1" {% if task.is_completed %}checked{% endif %}>
+      Mark as completed
+    </label>
+  {% endif %}
+  <button type="submit">Save</button>
+  <a href="{{ url_for('index') }}">Cancel</a>
+</form>
+{% endblock %}

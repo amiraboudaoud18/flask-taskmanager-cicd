@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login - Task Manager{% endblock %}
+{% block content %}
+<h1>Login</h1>
+<form method="post">
+  <label>
+    Username
+    <input type="text" name="username" required>
+  </label>
+  <label>
+    Password
+    <input type="password" name="password" required>
+  </label>
+  <button type="submit">Login</button>
+</form>
+<p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+{% endblock %}
