@@ -6,4 +6,4 @@ app = create_app()
 
 with app.app_context():
     db.create_all()
-    print("Database created.")
+    print('Database created.')
