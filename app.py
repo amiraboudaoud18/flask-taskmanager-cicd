@@ -1,4 +1,4 @@
-# Version: 1.0.1 - scenario : Testing CI/CD pipeline on dev branch - validating linting and tests 
+# Version: 1.0.1 - scenario : Testing CI/CD pipeline on dev branch
 
 import os
 from datetime import datetime, date
